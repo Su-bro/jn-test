@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <property name="LOG_PATH" value="./logs/api"/>
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+
+    <property name="LOG_FILE" value="${LOG_FILE:-spring}"/>
+    <springProperty name="SPRING_PROFILES_ACTIVE" source="spring.profiles.active"/>
+    <springProperty name="SPRING_APPLICATION_NAME" source="spring.application.name"/>
+
+    <!-- Console Log 설정 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %cyan(%logger{15}) - %msg%n%throwable</pattern>
+        </encoder>
+    </appender>
+
+
+    <logger name="jdbc" level="OFF"/>
+    <logger name="jdbc.sqlonly" level="OFF"/>
+    <logger name="jdbc.audit" level="OFF"/>
+    <logger name="jdbc.resultset" level="OFF"/>
+    <logger name="jdbc.connection" level="OFF"/>
+    <logger name="com.netflix.config.sources.URLConfigurationSource" level="ERROR" />
+
+    <!-- Profiles 에 따른 Log Level-->
+    <springProfile name="local,dev,stage,stage-live,live-a,live-c">
+        <logger name="jdbc.sqltiming" level="DEBUG"/>
+        <logger name="jdbc.resultsettable" level="DEBUG"/>
+        <logger name="com.osh.jntest" level="DEBUG"/>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+</configuration>
